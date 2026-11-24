@@ -9,6 +9,11 @@
 namespace OpenAPI\Client;
 
 use OpenAPI\Client\Api\DefaultApi;
+use OpenAPI\Client\Api\WorkspacesApi;
+use OpenAPI\Client\Api\TeamsApi;
+use OpenAPI\Client\Api\TeamsMembersApi;
+use OpenAPI\Client\Api\FoldersApi;
+use OpenAPI\Client\Api\DocumentsApi;
 use OpenAPI\Client\Configuration;
 use OpenAPI\Client\ApiException;
 
@@ -22,6 +27,11 @@ class PraemunioClient
     private $baseUrl;
     private $accessToken;
     private $refreshToken;
+    private $workspacesApi;
+    private $teamsApi;
+    private $teamsMembersApi;
+    private $foldersApi;
+    private $documentsApi;
 
     public function __construct(string $publicKey, string $secretKey, string $baseUrl = self::SANDBOX_URL)
     {
@@ -87,5 +97,45 @@ class PraemunioClient
         $config->setAccessToken($this->accessToken ?? '');
 
         return new DefaultApi(null, $config);
+    }
+
+    public function workspaces(): WorkspacesApi
+    {
+        if ($this->workspacesApi === null) {
+            $this->workspacesApi = new WorkspacesApi($this->createApi());
+        }
+        return $this->workspacesApi;
+    }
+
+    public function teams(): TeamsApi
+    {
+        if ($this->teamsApi === null) {
+            $this->teamsApi = new TeamsApi($this->createApi());
+        }
+        return $this->teamsApi;
+    }
+
+    public function teamsMembers(): TeamsMembersApi
+    {
+        if ($this->teamsMembersApi === null) {
+            $this->teamsMembersApi = new TeamsMembersApi($this->createApi());
+        }
+        return $this->teamsMembersApi;
+    }
+
+    public function folders(): FoldersApi
+    {
+        if ($this->foldersApi === null) {
+            $this->foldersApi = new FoldersApi($this->createApi());
+        }
+        return $this->foldersApi;
+    }
+
+    public function documents(): DocumentsApi
+    {
+        if ($this->documentsApi === null) {
+            $this->documentsApi = new DocumentsApi($this->createApi());
+        }
+        return $this->documentsApi;
     }
 }
